@@ -15,9 +15,11 @@ const styles = StyleSheet.create({
 
 const NotFound = () => (
   <CachedImage
-    mutate={false}
+    mutable={false}
     style={styles.image}
     resizeMode={"contain"}
     source={require("../../../assets/404.jpg")}
   />
 );
+
+export default Notfound;

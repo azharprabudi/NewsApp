@@ -16,6 +16,7 @@
     "react-native-paper": "^1.11.1",
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.11.2",
+    "rn-fetch-blob": "^0.10.12",
     "rn-placeholder": "^1.2.0"
   },
   "devDependencies": {

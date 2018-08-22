@@ -5,6 +5,7 @@ import isArray from "lodash/isArray";
 /* my module */
 import NewsAPI from "../api/news-api";
 import { tokenNewsAPI } from "../constants/tokens";
+import Notfound from "../components/etc/not-found";
 import SectionSource from "../components/sources-screen/section-source";
 
 const styles = StyleSheet.create({
@@ -79,6 +80,7 @@ class SourcesScreen extends PureComponent {
         renderItem={this._renderItem}
         keyExtractor={this._keyExtractor}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<Notfound />}
       />
     );
   }
