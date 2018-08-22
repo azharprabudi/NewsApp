@@ -1,4 +1,4 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
+import { AppRegistry } from "react-native";
+import Navigators from "./src/navigators";
 
-AppRegistry.registerComponent('NewsApp', () => App);
+AppRegistry.registerComponent("NewsApp", () => Navigators);
