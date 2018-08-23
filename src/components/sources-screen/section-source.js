@@ -1,6 +1,11 @@
 import React from "react";
-import { StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
-import { Paper, Text } from "react-native-paper";
+import {
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+  Text
+} from "react-native";
+import { Paper } from "react-native-paper";
 import { CachedImage } from "react-native-img-cache";
 import PropTypes from "prop-types";
 

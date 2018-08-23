@@ -18,6 +18,7 @@ import SectionSource from "../components/sources-screen/section-source";
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#f3f3f3"
   },
   sectionList: {

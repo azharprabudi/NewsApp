@@ -6,6 +6,7 @@ import { createSwitchNavigator, createStackNavigator } from "react-navigation";
 import InputIcon from "../components/etc/input-icon";
 import SourcesScreen from "../screens/sources-screen";
 import ArticlesScreen from "../screens/articles-screen";
+import WebviewScreen from "../screens/webview-screen";
 import Colors from "../constants/colors";
 
 const Navigators = createSwitchNavigator(
@@ -59,6 +60,15 @@ const Navigators = createSwitchNavigator(
               backgroundColor: Colors.primary
             }
           })
+        },
+        Webview: {
+          screen: WebviewScreen,
+          navigationOptions: {
+            headerTintColor: "white",
+            headerStyle: {
+              backgroundColor: Colors.primary
+            }
+          }
         }
       },
       {
