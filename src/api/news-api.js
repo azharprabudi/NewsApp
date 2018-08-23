@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import has from "lodash/has";
 import upperFirst from "lodash/upperFirst";
