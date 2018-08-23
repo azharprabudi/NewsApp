@@ -13,7 +13,7 @@ import isArray from "lodash/isArray";
 /* my module */
 import NewsAPI from "../api/news-api";
 import Tokens from "../constants/tokens";
-import NotFound from "../components/etc/not-found";
+import ArticlesScreen from "./articles-screen";
 import SectionSource from "../components/sources-screen/section-source";
 
 const styles = StyleSheet.create({
@@ -25,9 +25,20 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     marginVertical: 8
   },
-  label: {
+  wrapperLabel: {
+    marginVertical: 3,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  labelLeft: {
     color: "black",
-    fontWeight: "700"
+    fontWeight: "400",
+    fontSize: 18
+  },
+  labelRight: {
+    fontSize: 12,
+    color: "rgba(0,0,0,0.5)"
   }
 });
 
@@ -35,7 +46,23 @@ class SourcesScreen extends PureComponent {
   constructor() {
     super();
     this.state = {
-      data: [],
+      data: [
+        {
+          title: "Test",
+          data: [
+            {
+              category: "general",
+              country: "us",
+              description:
+                "Your trusted source for breaking news, analysis, exclusive interviews, headlines, and videos at ABCNews.com.",
+              id: "abc-news",
+              language: "en",
+              name: "ABC News",
+              url: "http://abcnews.go.com"
+            }
+          ]
+        }
+      ],
       loading: false
     };
     this.initialComponent = true; // flag for loading placeholder
@@ -43,7 +70,7 @@ class SourcesScreen extends PureComponent {
   }
 
   componentDidMount() {
-    this.getListSources();
+    // this.getListSources();
   }
 
   getListSources = async () => {
@@ -89,17 +116,18 @@ class SourcesScreen extends PureComponent {
 
   _keyExtractor = ({ id }) => id;
 
-  _renderItem = ({ item, index }) => (
+  _renderItem = ({ item }) => (
     <SectionSource
-      index={index}
       name={item.name}
       url={item.url}
       onPress={this._navigateToArticleScreen(item)}
     />
   );
 
-  _navigateToArticleScreen = item => {
-    this.props.navigation.navigate();
+  _navigateToArticleScreen = item => () => {
+    this.props.navigation.navigate("Articles", {
+      [ArticlesScreen.PARAMS_DATA_SOURCE]: item
+    });
   };
 
   render() {
@@ -116,7 +144,12 @@ class SourcesScreen extends PureComponent {
       >
         {this.state.data.map(item => (
           <View style={styles.sectionList} key={item.title}>
-            <Text style={styles.label}>{item.title}</Text>
+            <View style={styles.wrapperLabel}>
+              <Text style={styles.labelLeft}>{item.title}</Text>
+              <Text style={styles.labelRight}>
+                Swipe From Right To The Left
+              </Text>
+            </View>
             <FlatList
               horizontal={true}
               data={item.data}

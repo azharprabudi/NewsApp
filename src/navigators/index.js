@@ -1,8 +1,9 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { createSwitchNavigator, createStackNavigator } from "react-navigation";
 
 /* screen */
+import InputIcon from "../components/etc/input-icon";
 import SourcesScreen from "../screens/sources-screen";
 import ArticlesScreen from "../screens/articles-screen";
 import Colors from "../constants/colors";
@@ -20,12 +21,44 @@ const Navigators = createSwitchNavigator(
             headerTitleStyle: {
               flex: 1,
               textAlign: "center",
-              color: "black"
+              color: "white"
+            },
+            headerStyle: {
+              backgroundColor: Colors.primary
             }
           }
         },
         Articles: {
-          screen: ArticlesScreen
+          screen: ArticlesScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: (
+              <InputIcon
+                useClearValue
+                iconClearValue={{
+                  name: "md-close",
+                  color: "white",
+                  size: 24
+                }}
+                onClearValue={navigation.getParam(
+                  ArticlesScreen.PARAMS_ONCLEAR_SEARCH,
+                  () => {}
+                )}
+                onChangeText={navigation.getParam(
+                  ArticlesScreen.PARAMS_ONCHANGE_SEARCH,
+                  () => {}
+                )}
+                underlineColorAndroid={"white"}
+                value={navigation.getParam(
+                  ArticlesScreen.PARAMS_SEARCH_VALUE,
+                  ""
+                )}
+              />
+            ),
+            headerTintColor: "white",
+            headerStyle: {
+              backgroundColor: Colors.primary
+            }
+          })
         }
       },
       {
