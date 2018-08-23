@@ -14,38 +14,38 @@ const data = [
   {
     source: {
       id: "2",
-      name: "abc"
+      name: "xyz"
     },
-    author: "abc",
-    title: "abc",
-    description: "abc",
-    url: "abc",
-    urlToImage: "abc",
-    publishedAt: "abc"
+    author: "xyz",
+    title: "xyz",
+    description: "xyz",
+    url: "xyz",
+    urlToImage: "xyz",
+    publishedAt: "xyz"
   },
   {
     source: {
       id: "3",
-      name: "abc"
+      name: "def"
     },
-    author: "abc",
-    title: "abc",
-    description: "abc",
-    url: "abc",
-    urlToImage: "abc",
-    publishedAt: "abc"
+    author: "def",
+    title: "def",
+    description: "def",
+    url: "def",
+    urlToImage: "def",
+    publishedAt: "def"
   },
   {
     source: {
       id: "4",
-      name: "abc"
+      name: "geh"
     },
-    author: "abc",
-    title: "abc",
-    description: "abc",
-    url: "abc",
-    urlToImage: "abc",
-    publishedAt: "abc"
+    author: "geh",
+    title: "geh",
+    description: "geh",
+    url: "geh",
+    urlToImage: "geh",
+    publishedAt: "geh"
   }
 ];
 

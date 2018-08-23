@@ -9,15 +9,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "400",
+    textAlign: "center",
+    color: Colors.grey
   }
 });
 
 const NotFound = () => (
   <View style={styles.container}>
-    <Icon name={"md-refresh"} color={Colors.grey} />
-    <Text>
-      {`Ups .. Not Found !!\nPull from top to bottom to refresh this page`}
-    </Text>
+    <Icon name={"md-refresh"} color={Colors.grey} size={48} />
+    <Text
+      style={styles.label}
+    >{`Ups .. Not Found !!\nclear your search value`}</Text>
   </View>
 );
 

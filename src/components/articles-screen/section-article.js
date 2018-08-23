@@ -95,7 +95,7 @@ const SectionArticle = props => (
 );
 
 SectionArticle.propTypes = {
-  urlToImage: PropTypes.string.isRequired,
+  urlToImage: PropTypes.string,
   publishedAt: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,

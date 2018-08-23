@@ -148,7 +148,7 @@ class ArticlesScreen extends PureComponent {
       }
       await this.setStateProms("loading", true);
 
-      let resultReq = await this._newsAPI.getArticles(
+      const resultReq = await this._newsAPI.getArticles(
         this._params.id,
         this.state.search,
         this._page
@@ -158,15 +158,14 @@ class ArticlesScreen extends PureComponent {
         throw new Error(resultReq);
       }
 
-      console.log(resultReq);
       this.setState(
         {
           ...this.state,
           loading: false,
           data:
             isSearch ||
-            (this.state.initialRenderComponent === false &&
-              !this.state.initialRenderComponent === true)
+            (this.state.initialRenderComponent == false &&
+              !this.state.initialRenderComponent == true)
               ? resultReq
               : [...this.state.data, ...resultReq],
           initialRenderComponent: true
@@ -271,7 +270,7 @@ class ArticlesScreen extends PureComponent {
               removeClippedSubviews={true}
               data={this.state.data}
               renderItem={this._renderItem}
-              keyExtractor={({ source }) => source.id}
+              keyExtractor={({ url }) => url}
               onScroll={Animated.event([
                 {
                   nativeEvent: {
@@ -293,6 +292,7 @@ class ArticlesScreen extends PureComponent {
               }
               onEndReached={this.onScrollFetchData}
               onEndReachedThreshold={1}
+              ListEmptyComponent={NotFound}
             />
           </View>
         </Animated.View>
