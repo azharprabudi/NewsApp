@@ -58,6 +58,11 @@ const Navigators = createSwitchNavigator(
                   ArticlesScreen.PARAMS_SEARCH_VALUE,
                   ""
                 )}
+                returnKeyType={"search"}
+                onSubmitEditing={navigation.getParam(
+                  ArticlesScreen.PARAMS_ON_SUBMITEDITING,
+                  () => {}
+                )}
                 placeholder={"Search Article"}
               />
             ),

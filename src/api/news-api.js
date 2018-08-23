@@ -63,6 +63,9 @@ class NewsAPI {
       URL += `&q=${search}`;
     }
     const result = await this._axios.get(URL);
+    if (has(result, "data")) {
+      return result.data.articles;
+    }
     return result;
   }
 }

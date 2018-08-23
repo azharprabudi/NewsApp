@@ -15,10 +15,10 @@ import NewsAPI from "../api/news-api";
 import Tokens from "../constants/tokens";
 import ArticlesScreen from "./articles-screen";
 import SectionSource from "../components/sources-screen/section-source";
+import Colors from "../constants/colors";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#f3f3f3"
   },
   sectionList: {
@@ -47,23 +47,7 @@ class SourcesScreen extends PureComponent {
   constructor() {
     super();
     this.state = {
-      data: [
-        {
-          title: "Test",
-          data: [
-            {
-              category: "general",
-              country: "us",
-              description:
-                "Your trusted source for breaking news, analysis, exclusive interviews, headlines, and videos at ABCNews.com.",
-              id: "abc-news",
-              language: "en",
-              name: "ABC News",
-              url: "http://abcnews.go.com"
-            }
-          ]
-        }
-      ],
+      data: [],
       loading: false
     };
     this.initialComponent = true; // flag for loading placeholder
@@ -71,7 +55,7 @@ class SourcesScreen extends PureComponent {
   }
 
   componentDidMount() {
-    // this.getListSources();
+    this.getListSources();
   }
 
   getListSources = async () => {
@@ -138,6 +122,7 @@ class SourcesScreen extends PureComponent {
         contentContainerStyle={styles.container}
         refreshControl={
           <RefreshControl
+            colors={[Colors.primary]}
             onRefresh={this.getListSources}
             refreshing={this.state.loading}
           />
