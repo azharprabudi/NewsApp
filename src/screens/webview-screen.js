@@ -1,7 +1,20 @@
 import React, { PureComponent } from "react";
-import { WebView } from "react-native";
+import { WebView, ActivityIndicator, View, StyleSheet } from "react-native";
+
+/* my modules */
+import Colors from "../constants/colors";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 15,
+    backgroundColor: "white",
+    alignItems: "center"
+  }
+});
 
 class WebviewScreen extends PureComponent {
+  static PARAMS_TITLE_WEBVIEW = "PARAMS_TITLE_WEBVIEW";
   static PARAMS_URL_WEBVIEW = "PARAMS_URL_WEBVIEW";
 
   constructor(props) {
@@ -12,8 +25,21 @@ class WebviewScreen extends PureComponent {
     );
   }
 
+  _renderLoading = () => (
+    <View style={styles.container}>
+      <ActivityIndicator color={Colors.primary} size={24} />
+    </View>
+  );
+
   render() {
-    return <WebView source={{ uri: this._paramsUrl }} />;
+    return (
+      <WebView
+        startInLoadingState={true}
+        renderError={this._renderError}
+        source={{ uri: this._paramsUrl }}
+        renderLoading={this._renderLoading}
+      />
+    );
   }
 }
 

@@ -277,8 +277,12 @@ class ArticlesScreen extends PureComponent {
     this.getListArticles(true);
   };
 
-  getListArticles = async (isScrollToBottom = false) => {
+  getListArticles = async (isScrollToBottom = false, isSearch = false) => {
     try {
+      if (isSearch) {
+        this._page = 1;
+      }
+
       const resultReq = await this._newsAPI.getArticles(
         this._params.id,
         this.state.search,

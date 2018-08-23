@@ -1,23 +1,23 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { CachedImage } from "react-native-img-cache";
 
 const styles = StyleSheet.create({
   image: {
-    width: undefined
+    width: 200,
+    height: 200
   }
 });
 
 const NotFound = () => (
-  <View>
+  <React.Fragment>
     <CachedImage
       mutable={false}
       style={styles.image}
       resizeMode={"contain"}
       source={require("../../../assets/404.jpg")}
     />
-    <Text style={{ color: "red" }}>HELo</Text>
-  </View>
+  </React.Fragment>
 );
 
 export default NotFound;

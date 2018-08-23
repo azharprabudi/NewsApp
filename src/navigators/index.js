@@ -69,12 +69,28 @@ const Navigators = createSwitchNavigator(
         },
         Webview: {
           screen: WebviewScreen,
-          navigationOptions: {
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: (
+              <View>
+                <Text
+                  style={{ fontSize: 16, color: "white", fontWeight: "400" }}
+                >
+                  {`${navigation
+                    .getParam(WebviewScreen.PARAMS_TITLE_WEBVIEW, "")
+                    .substr(0, 35)}...`}
+                </Text>
+                <Text style={{ fontSize: 12, color: "white" }}>
+                  {`${navigation
+                    .getParam(WebviewScreen.PARAMS_URL_WEBVIEW, "")
+                    .substr(0, 35)}...`}
+                </Text>
+              </View>
+            ),
             headerTintColor: "white",
             headerStyle: {
               backgroundColor: Colors.primary
             }
-          }
+          })
         }
       },
       {
