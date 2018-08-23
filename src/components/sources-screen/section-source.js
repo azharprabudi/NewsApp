@@ -71,8 +71,8 @@ const SectionSource = props => {
 };
 
 SectionSource.propTypes = {
-  name: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  url: PropTypes.string,
   onPress: PropTypes.func.isRequired,
   isLoaded: PropTypes.bool.isRequired
 };

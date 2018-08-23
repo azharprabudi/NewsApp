@@ -96,10 +96,10 @@ const SectionArticle = props => (
 
 SectionArticle.propTypes = {
   urlToImage: PropTypes.string,
-  publishedAt: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  publishedAt: PropTypes.string,
+  description: PropTypes.string,
+  title: PropTypes.string,
+  author: PropTypes.string,
   onPress: PropTypes.func.isRequired,
   isLoaded: PropTypes.bool.isRequired
 };

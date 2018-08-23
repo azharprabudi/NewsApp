@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import {
   Alert,
-  ScrollView,
   StyleSheet,
   View,
   Text,
@@ -22,7 +21,7 @@ import Colors from "../constants/colors";
 import DUMMY_DATA_ARTICLES from "../helpers/dummy-data-articles";
 import NotFound from "../components/etc/not-found";
 
-const HEADER_SCROLL_DISTANCE = 200;
+const HEADER_SCROLL_DISTANCE = 130;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,7 +137,10 @@ class ArticlesScreen extends PureComponent {
   };
 
   onScrollFetchData = () => {
-    this.getListArticles(true);
+    if (this._timeout) {
+      clearTimeout(this._timeout);
+    }
+    this._timeout = setTimeout(() => this.getListArticles(true), 200);
   };
 
   getListArticles = async (isScrollToBottom = false, isSearch = false) => {
@@ -228,7 +230,7 @@ class ArticlesScreen extends PureComponent {
       outputRange: [1, 0]
     });
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
         <Animated.View
           style={[
             styles.wrapperImage,
@@ -270,7 +272,9 @@ class ArticlesScreen extends PureComponent {
               removeClippedSubviews={true}
               data={this.state.data}
               renderItem={this._renderItem}
-              keyExtractor={({ url }) => url}
+              keyExtractor={({ publishedAt, title }) =>
+                `${publishedAt}${title}`
+              }
               onScroll={Animated.event([
                 {
                   nativeEvent: {
@@ -296,7 +300,7 @@ class ArticlesScreen extends PureComponent {
             />
           </View>
         </Animated.View>
-      </ScrollView>
+      </View>
     );
   }
 }
