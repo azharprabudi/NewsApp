@@ -5,7 +5,9 @@ import {
   StyleSheet,
   View,
   Text,
-  FlatList
+  FlatList,
+  Animated,
+  RefreshControl
 } from "react-native";
 import { CachedImage } from "react-native-img-cache";
 import upperFirst from "lodash/upperFirst";
@@ -16,6 +18,9 @@ import NewsAPI from "../api/news-api";
 import Tokes from "../constants/tokens";
 import SectionArticle from "../components/articles-screen/section-article";
 import WebviewScreen from "./webview-screen";
+import Colors from "../constants/colors";
+
+const HEADER_SCROLL_DISTANCE = 200;
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +30,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: 80,
     backgroundColor: "white",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -34,7 +38,6 @@ const styles = StyleSheet.create({
   wrapperImage: {
     width: 120,
     height: 130,
-    top: 15,
     left: 18,
     zIndex: 10,
     borderRadius: 5,
@@ -232,7 +235,7 @@ class ArticlesScreen extends PureComponent {
           publishedAt: "2018-05-25T05:25:25Z"
         }
       ],
-      loading: true
+      loading: false
     };
     this._page = 1;
     this._params = props.navigation.getParam(
@@ -240,6 +243,7 @@ class ArticlesScreen extends PureComponent {
       { id: "", url: "", name: "", description: "", category: "" }
     );
     this._newsAPI = new NewsAPI(Tokes.newsAPI);
+    this._scrollYAnimated = new Animated.Value(0);
   }
 
   componentDidMount() {
@@ -267,6 +271,10 @@ class ArticlesScreen extends PureComponent {
           [ArticlesScreen.PARAMS_SEARCH_VALUE]: value
         })
     );
+  };
+
+  onScrollFetchData = () => {
+    this.getListArticles(true);
   };
 
   getListArticles = async (isScrollToBottom = false) => {
@@ -297,9 +305,10 @@ class ArticlesScreen extends PureComponent {
     }
   };
 
-  _renderItem = ({ item }) => (
+  _renderItem = ({ item, index }) => (
     <SectionArticle
       {...item}
+      index={index}
       onPress={this._openUrlLink(item.url, item.title)}
     />
   );
@@ -316,9 +325,26 @@ class ArticlesScreen extends PureComponent {
   };
 
   render() {
+    const marginTopContent = this._scrollYAnimated.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [80, 0]
+    });
+    const topWrapperImage = this._scrollYAnimated.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE - 10],
+      outputRange: [15, 0]
+    });
+    const opacityWrapperImage = this._scrollYAnimated.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE - 10],
+      outputRange: [1, 0]
+    });
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.wrapperImage}>
+        <Animated.View
+          style={[
+            styles.wrapperImage,
+            { top: topWrapperImage, opacity: opacityWrapperImage }
+          ]}
+        >
           <CachedImage
             mutable={true}
             source={{
@@ -329,8 +355,15 @@ class ArticlesScreen extends PureComponent {
             resizeMode={"cover"}
             style={styles.image}
           />
-        </View>
-        <View style={styles.content}>
+        </Animated.View>
+        <Animated.View
+          style={[
+            styles.content,
+            {
+              marginTop: marginTopContent
+            }
+          ]}
+        >
           <View style={styles.informationSource}>
             <Text style={styles.informationTitle}>{`${`${
               this._params.name
@@ -348,10 +381,27 @@ class ArticlesScreen extends PureComponent {
               data={this.state.data}
               renderItem={this._renderItem}
               keyExtractor={({ url }) => url}
-              onScroll={this.hideInformationHeader}
+              onScroll={Animated.event([
+                {
+                  nativeEvent: {
+                    contentOffset: {
+                      y: this._scrollYAnimated
+                    }
+                  }
+                }
+              ])}
+              refreshControl={
+                <RefreshControl
+                  colors={[Colors.primary]}
+                  onRefresh={this.getListArticles}
+                  refreshing={this.state.loading}
+                />
+              }
+              onEndReached={this.onScrollFetchData}
+              onEndReachedThreshold={1}
             />
           </View>
-        </View>
+        </Animated.View>
       </ScrollView>
     );
   }

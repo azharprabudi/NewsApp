@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { CachedImage } from "react-native-img-cache";
+import moment from "moment";
 import PropTypes from "prop-types";
 
 const styles = StyleSheet.create({
@@ -14,7 +15,6 @@ const styles = StyleSheet.create({
   image: {
     width: 90,
     height: 90,
-    marginRight: -10,
     zIndex: 10,
     borderRadius: 5
   },
@@ -48,24 +48,34 @@ const styles = StyleSheet.create({
 const SectionArticle = props => (
   <TouchableWithoutFeedback onPress={props.onPress}>
     <View style={styles.wrapper}>
-      <CachedImage
-        mutable={true}
-        style={styles.image}
-        resizeMode={"cover"}
-        source={{ uri: props.urlToImage }}
-      />
+      {props.index % 2 == 0 && (
+        <CachedImage
+          mutable={true}
+          style={[styles.image, { marginRight: -10 }]}
+          resizeMode={"cover"}
+          source={{ uri: props.urlToImage }}
+        />
+      )}
       <View style={styles.wrapperContent}>
         <View>
           <Text style={styles.title}>{props.title}</Text>
-          <Text style={styles.labelInformation}>{`${props.author} - ${
+          <Text style={styles.labelInformation}>{`${props.author} - ${moment(
             props.publishedAt
-          }`}</Text>
+          ).format("D-MM-YYYY H:mm")}`}</Text>
         </View>
         <Text style={styles.labelDescription}>
           {`${props.description.substr(0, 90)}...`}
         </Text>
         <Text style={styles.labelInformation}>Tap to read more</Text>
       </View>
+      {props.index % 2 == 1 && (
+        <CachedImage
+          mutable={true}
+          style={[styles.image, { marginLeft: -10 }]}
+          resizeMode={"cover"}
+          source={{ uri: props.urlToImage }}
+        />
+      )}
     </View>
   </TouchableWithoutFeedback>
 );

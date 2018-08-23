@@ -33,6 +33,7 @@ const InputIcon = props => (
       underlineColorAndroid={"transparent"}
       onSubmitEditing={props.onSubmitEditing}
       style={[styles.input, { color: props.underlineColorAndroid }]}
+      placeholderTextColor={props.underlineColorAndroid}
     />
     {props.useClearValue &&
       props.value.replace(/\s/g, "") !== "" && (

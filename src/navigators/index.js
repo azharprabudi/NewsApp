@@ -35,6 +35,11 @@ const Navigators = createSwitchNavigator(
             headerTitle: (
               <InputIcon
                 useClearValue
+                iconLeft={{
+                  name: "md-search",
+                  color: "white",
+                  size: 24
+                }}
                 iconClearValue={{
                   name: "md-close",
                   color: "white",
@@ -53,6 +58,7 @@ const Navigators = createSwitchNavigator(
                   ArticlesScreen.PARAMS_SEARCH_VALUE,
                   ""
                 )}
+                placeholder={"Search Article"}
               />
             ),
             headerTintColor: "white",
