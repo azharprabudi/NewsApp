@@ -9,6 +9,7 @@ import {
   View
 } from "react-native";
 import isArray from "lodash/isArray";
+import Placeholder from "rn-placeholder";
 
 /* my module */
 import NewsAPI from "../api/news-api";
@@ -16,6 +17,8 @@ import Tokens from "../constants/tokens";
 import ArticlesScreen from "./articles-screen";
 import SectionSource from "../components/sources-screen/section-source";
 import Colors from "../constants/colors";
+import DUMMY_DATA_SOURCES from "../helpers/dummy-data-sources";
+import NotFound from "../components/etc/not-found";
 
 const styles = StyleSheet.create({
   container: {
@@ -47,10 +50,10 @@ class SourcesScreen extends PureComponent {
   constructor() {
     super();
     this.state = {
-      data: [],
-      loading: false
+      data: DUMMY_DATA_SOURCES,
+      loading: false,
+      initialRenderComponent: false
     };
-    this.initialComponent = true; // flag for loading placeholder
     this._newsAPI = new NewsAPI(Tokens.newsAPI);
   }
 
@@ -72,7 +75,8 @@ class SourcesScreen extends PureComponent {
 
       this.setState({
         loading: false,
-        data: resultReq
+        data: resultReq,
+        initialRenderComponent: true
       });
     } catch (e) {
       await this.setStateProms("loading", false);
@@ -106,6 +110,7 @@ class SourcesScreen extends PureComponent {
       name={item.name}
       url={item.url}
       onPress={this._navigateToArticleScreen(item)}
+      isLoaded={this.state.initialRenderComponent}
     />
   );
 
@@ -124,17 +129,31 @@ class SourcesScreen extends PureComponent {
           <RefreshControl
             colors={[Colors.primary]}
             onRefresh={this.getListSources}
-            refreshing={this.state.loading}
+            refreshing={
+              !this.state.initialRenderComponent ? false : this.state.loading
+            }
           />
         }
       >
         {this.state.data.map(item => (
           <View style={styles.sectionList} key={item.title}>
-            <View style={styles.wrapperLabel}>
-              <Text style={styles.labelLeft}>{item.title}</Text>
-              <Text style={styles.labelRight}>
-                Swipe From Right To The Left
-              </Text>
+            <View
+              style={{
+                marginVertical: !this.state.initialRenderComponent ? 5 : 0
+              }}
+            >
+              <Placeholder.Line
+                width="30%"
+                textSize={12}
+                onReady={this.state.initialRenderComponent}
+              >
+                <View style={styles.wrapperLabel}>
+                  <Text style={styles.labelLeft}>{item.title}</Text>
+                  <Text style={styles.labelRight}>
+                    Swipe From Right To The Left
+                  </Text>
+                </View>
+              </Placeholder.Line>
             </View>
             <FlatList
               horizontal={true}

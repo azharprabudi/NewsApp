@@ -7,7 +7,7 @@ class NewsAPI {
   constructor(token) {
     this._axios = axios.create({
       baseURL: "http://newsapi.org/v2",
-      timeout: 3000,
+      timeout: 3500,
       headers: {
         "X-Api-Key": token
       }

@@ -19,6 +19,8 @@ import Tokens from "../constants/tokens";
 import SectionArticle from "../components/articles-screen/section-article";
 import WebviewScreen from "./webview-screen";
 import Colors from "../constants/colors";
+import DUMMY_DATA_ARTICLES from "../helpers/dummy-data-articles";
+import NotFound from "../components/etc/not-found";
 
 const HEADER_SCROLL_DISTANCE = 200;
 
@@ -88,8 +90,9 @@ class ArticlesScreen extends PureComponent {
     super(props);
     this.state = {
       search: "",
-      data: [],
-      loading: false
+      data: DUMMY_DATA_ARTICLES,
+      loading: false,
+      initialRenderComponent: false
     };
     this._page = 1;
     this._params = props.navigation.getParam(
@@ -145,20 +148,28 @@ class ArticlesScreen extends PureComponent {
       }
       await this.setStateProms("loading", true);
 
-      const resultReq = await this._newsAPI.getArticles(
+      let resultReq = await this._newsAPI.getArticles(
         this._params.id,
         this.state.search,
         this._page
       );
+
       if (!isArray(resultReq)) {
         throw new Error(resultReq);
       }
 
+      console.log(resultReq);
       this.setState(
         {
           ...this.state,
           loading: false,
-          data: !isSearch ? [...this.state.data, ...resultReq] : resultReq
+          data:
+            isSearch ||
+            (this.state.initialRenderComponent === false &&
+              !this.state.initialRenderComponent === true)
+              ? resultReq
+              : [...this.state.data, ...resultReq],
+          initialRenderComponent: true
         },
         () => {
           if (isScrollToBottom) {
@@ -192,6 +203,7 @@ class ArticlesScreen extends PureComponent {
     <SectionArticle
       {...item}
       index={index}
+      isLoaded={this.state.initialRenderComponent}
       onPress={this._openUrlLink(item.url, item.title)}
     />
   );
@@ -201,10 +213,6 @@ class ArticlesScreen extends PureComponent {
       [WebviewScreen.PARAMS_TITLE_WEBVIEW]: title,
       [WebviewScreen.PARAMS_URL_WEBVIEW]: url
     });
-  };
-
-  hideInformationHeader = data => {
-    console.log(data);
   };
 
   render() {
@@ -263,7 +271,7 @@ class ArticlesScreen extends PureComponent {
               removeClippedSubviews={true}
               data={this.state.data}
               renderItem={this._renderItem}
-              keyExtractor={({ url }) => url}
+              keyExtractor={({ source }) => source.id}
               onScroll={Animated.event([
                 {
                   nativeEvent: {
@@ -276,7 +284,11 @@ class ArticlesScreen extends PureComponent {
               refreshControl={
                 <RefreshControl
                   colors={[Colors.primary]}
-                  refreshing={this.state.loading}
+                  refreshing={
+                    !this.state.initialRenderComponent
+                      ? false
+                      : this.state.loading
+                  }
                 />
               }
               onEndReached={this.onScrollFetchData}

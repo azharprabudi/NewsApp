@@ -1,23 +1,24 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
-import { CachedImage } from "react-native-img-cache";
+import { StyleSheet, Text, View } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+
+import Colors from "../../constants/colors";
 
 const styles = StyleSheet.create({
-  image: {
-    width: 200,
-    height: 200
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
 const NotFound = () => (
-  <React.Fragment>
-    <CachedImage
-      mutable={false}
-      style={styles.image}
-      resizeMode={"contain"}
-      source={require("../../../assets/404.jpg")}
-    />
-  </React.Fragment>
+  <View style={styles.container}>
+    <Icon name={"md-refresh"} color={Colors.grey} />
+    <Text>
+      {`Ups .. Not Found !!\nPull from top to bottom to refresh this page`}
+    </Text>
+  </View>
 );
 
 export default NotFound;
