@@ -1,32 +1,53 @@
-import has from "lodash/has";
+import React from "react";
 import axios from "axios";
+import has from "lodash/has";
 
 class NewsAPI {
   constructor(token) {
     this._axios = axios.create({
-      baseUrl: "https://newsapi.org/v2",
+      baseURL: "http://newsapi.org/v2",
       timeout: 3000,
       headers: {
-        Authorization: token
+        "X-Api-Key": token
       }
     });
   }
 
   async getSources() {
     const result = await this._axios.get("/sources?country=us&language=en");
-    if (has(result, "data")) {
-      return result.data;
+    if (!has(result, "data")) {
+      return result;
     }
-    return result;
+
+    let data = [];
+    let index = -1;
+    let tempSeparator = "";
+
+    /* create data as section want */
+    for (let i = 0; i < result.data.sources.length; i++) {
+      let value = result.data.sources[i];
+      let separator = value.name.charAt(0).toUpperCase();
+
+      if (tempSeparator !== separator) {
+        index += 1;
+      }
+
+      if (!data[index]) {
+        data[index] = {
+          title: separator,
+          data: []
+        };
+      }
+      data[index].data.push(value);
+      tempSeparator = separator;
+    }
+    return data;
   }
 
   async getArticles(sources = "", page = 1) {
     const result = await this._axios.get(
       `/everything?sources=${sources}&page=${page}&sortBy=publishedAt`
     );
-    if (has(result, "data")) {
-      return result.data;
-    }
     return result;
   }
 }

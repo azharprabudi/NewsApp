@@ -1,25 +1,23 @@
 import React from "react";
-import CachedImage from "react-native-img-cache";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { CachedImage } from "react-native-img-cache";
 
 const styles = StyleSheet.create({
   image: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    position: "absolute",
-    alignSelf: "stretch"
+    width: undefined
   }
 });
 
 const NotFound = () => (
-  <CachedImage
-    mutable={false}
-    style={styles.image}
-    resizeMode={"contain"}
-    source={require("../../../assets/404.jpg")}
-  />
+  <View>
+    <CachedImage
+      mutable={false}
+      style={styles.image}
+      resizeMode={"contain"}
+      source={require("../../../assets/404.jpg")}
+    />
+    <Text style={{ color: "red" }}>HELo</Text>
+  </View>
 );
 
-export default Notfound;
+export default NotFound;

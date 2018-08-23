@@ -1,16 +1,33 @@
 import React, { PureComponent } from "react";
-import { FlatList, Alert, Text, StyleSheet } from "react-native";
+import {
+  FlatList,
+  Alert,
+  StyleSheet,
+  Text,
+  RefreshControl,
+  ScrollView,
+  View
+} from "react-native";
 import isArray from "lodash/isArray";
 
 /* my module */
 import NewsAPI from "../api/news-api";
-import { tokenNewsAPI } from "../constants/tokens";
-import Notfound from "../components/etc/not-found";
+import Tokens from "../constants/tokens";
+import NotFound from "../components/etc/not-found";
 import SectionSource from "../components/sources-screen/section-source";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    backgroundColor: "#f3f3f3"
+  },
+  sectionList: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    marginVertical: 8
+  },
+  label: {
+    color: "black",
+    fontWeight: "700"
   }
 });
 
@@ -19,10 +36,10 @@ class SourcesScreen extends PureComponent {
     super();
     this.state = {
       data: [],
-      loading: true
+      loading: false
     };
     this.initialComponent = true; // flag for loading placeholder
-    this._newsAPI = new NewsAPI(tokenNewsAPI);
+    this._newsAPI = new NewsAPI(Tokens.newsAPI);
   }
 
   componentDidMount() {
@@ -33,7 +50,7 @@ class SourcesScreen extends PureComponent {
     try {
       await this.setStateProms("loading", true);
       const resultReq = await this._newsAPI.getSources();
-      if (!has(resultReq, "data")) {
+      if (!isArray(resultReq)) {
         throw new Error(resultReq);
       }
 
@@ -43,11 +60,14 @@ class SourcesScreen extends PureComponent {
 
       this.setState({
         loading: false,
-        data: resultReq.data.sources
+        data: resultReq
       });
     } catch (e) {
       await this.setStateProms("loading", false);
-      Alert("Server Error", isArray(e) ? JSON.stringify(e) : e.toString());
+      Alert.alert(
+        "Server Error",
+        isArray(e) ? JSON.stringify(e) : e.toString()
+      );
     }
   };
 
@@ -69,19 +89,46 @@ class SourcesScreen extends PureComponent {
 
   _keyExtractor = ({ id }) => id;
 
-  _renderItem = item => <SectionSource {...item} />;
+  _renderItem = ({ item, index }) => (
+    <SectionSource
+      index={index}
+      name={item.name}
+      url={item.url}
+      onPress={this._navigateToArticleScreen(item)}
+    />
+  );
+
+  _navigateToArticleScreen = item => {
+    this.props.navigation.navigate();
+  };
 
   render() {
     return (
-      <FlatList
-        removeClippedSubviews
-        style={styles.styles}
-        data={this.state.data}
-        renderItem={this._renderItem}
-        keyExtractor={this._keyExtractor}
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Notfound />}
-      />
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            onRefresh={this.getListSources}
+            refreshing={this.state.loading}
+          />
+        }
+      >
+        {this.state.data.map(item => (
+          <View style={styles.sectionList} key={item.title}>
+            <Text style={styles.label}>{item.title}</Text>
+            <FlatList
+              horizontal={true}
+              data={item.data}
+              removeClippedSubviews
+              initialNumToRender={5}
+              renderItem={this._renderItem}
+              keyExtractor={this._keyExtractor}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        ))}
+      </ScrollView>
     );
   }
 }

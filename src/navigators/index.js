@@ -1,9 +1,11 @@
+import React from "react";
 import { View } from "react-native";
 import { createSwitchNavigator, createStackNavigator } from "react-navigation";
 
 /* screen */
 import SourcesScreen from "../screens/sources-screen";
 import ArticlesScreen from "../screens/articles-screen";
+import Colors from "../constants/colors";
 
 const Navigators = createSwitchNavigator(
   {
@@ -12,7 +14,14 @@ const Navigators = createSwitchNavigator(
         Sources: {
           screen: SourcesScreen,
           navigationOptions: {
-            header: null
+            title: "List Sources",
+            headerLeft: <View />,
+            headerRight: <View />,
+            headerTitleStyle: {
+              flex: 1,
+              textAlign: "center",
+              color: "black"
+            }
           }
         },
         Articles: {
